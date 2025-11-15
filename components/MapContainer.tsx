@@ -1,7 +1,7 @@
 "use client";
 import { MapContainer, TileLayer, useMapEvents } from "react-leaflet";
 import dynamic from "next/dynamic";
-
+import EventSheet, { EventData } from "./EventSheet";
 const EventMarkers = dynamic(() => import("./EventMarkers"), { ssr: false });
 import "leaflet/dist/leaflet.css";
 import { useEffect, useRef, useState } from "react";
@@ -27,10 +27,22 @@ function Geolocate({ onLocate }: { onLocate: (pos: [number, number]) => void }) 
   return null;
 }
 
-export default function MainMap({ onPinClick, filters }: { onPinClick?: (event: any) => void, filters?: any }) {
+export default function MainMap({ events = [] }: { events: any[] }) {
   const [center, setCenter] = useState<[number, number]>(DEFAULT_POSITION);
   const [userMoved, setUserMoved] = useState(false);
   const mapRef = useRef<L.Map | null>(null);
+  const [selectedEvent, setSelectedEvent] = useState<EventData | null>(null);
+  const [sheetOpen, setSheetOpen] = useState(false);
+
+  function handlePinClick(event: EventData) {
+    setSelectedEvent(event);
+    setSheetOpen(true);
+  }
+
+  function handleCloseSheet() {
+    setSheetOpen(false);
+    setTimeout(() => setSelectedEvent(null), 300);
+  }
 
   function RecenterControl() {
     const map = mapRef.current;
@@ -87,7 +99,7 @@ export default function MainMap({ onPinClick, filters }: { onPinClick?: (event: 
         />
         <Geolocate onLocate={setCenter} />
         <MapEvents />
-        <EventMarkers onPinClick={onPinClick} filters={filters} />
+        <EventMarkers events={events} onPinClick={handlePinClick} />
       </MapContainer>
       <div className="map-controls">
         <RecenterControl />
@@ -114,6 +126,7 @@ export default function MainMap({ onPinClick, filters }: { onPinClick?: (event: 
           </button>
         </div>
       </div>
+      <EventSheet event={selectedEvent} open={sheetOpen} onClose={handleCloseSheet} />
     </div>
   );
 }

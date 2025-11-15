@@ -25,30 +25,16 @@ function createIcon(category: string, image: string) {
   });
 }
 
-export default function EventMarkers({ onPinClick, filters }: { onPinClick?: (event: any) => void, filters?: any }) {
+export default function EventMarkers({ events, onPinClick }: { events: any[], onPinClick?: (event: any) => void }) {
   const map = useMap();
-  const [events, setEvents] = useState<Event[]>([]);
-
-  useEffect(() => {
-    fetch("/api/events")
-      .then((res) => res.json())
-      .then((data) => setEvents(Array.isArray(data) ? data : []));
-  }, []);
 
   useEffect(() => {
     // @ts-ignore
     const markerCluster = L.markerClusterGroup();
-    let filtered = events;
-    if (filters) {
-      if (filters.categories?.length)
-        filtered = filtered.filter(e => filters.categories.includes(e.category));
-      if (filters.freeOnly)
-        filtered = filtered.filter(e => e.free);
-      // Data: da implementare in base a struttura reale
-    }
-    filtered.forEach((event) => {
+    events.forEach((event) => {
+      if (!event.lat || !event.lng) return;
       const marker = L.marker([event.lat, event.lng], {
-        icon: createIcon(event.category, event.image),
+        icon: createIcon(event.category, event.image_url_square || event.image_url || "/mock/music1.jpg"),
       });
       marker.on("click", () => onPinClick?.(event));
       markerCluster.addLayer(marker);
@@ -57,7 +43,7 @@ export default function EventMarkers({ onPinClick, filters }: { onPinClick?: (ev
     return () => {
       map.removeLayer(markerCluster);
     };
-  }, [map, events, onPinClick, filters]);
+  }, [map, events, onPinClick]);
 
   return null;
 }

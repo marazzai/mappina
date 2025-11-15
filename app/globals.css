@@ -2,27 +2,3 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-body {
-  @apply bg-white text-neutral-900 font-sans;
-}
-
-/* Header traslucido */
-.header-blur {
-  @apply fixed top-0 left-0 w-full z-30 bg-white/80 backdrop-blur-sm border-b border-neutral-200;
-}
-
-/* Controlli mappa (es. bottom right) */
-.map-controls {
-  @apply fixed bottom-4 right-4 flex flex-col gap-2 z-20;
-}
-
-/* Bottom sheet evento */
-.event-bottom-sheet {
-  @apply fixed left-0 right-0 bottom-0 z-40 bg-white rounded-t-2xl shadow-2xl p-4 max-h-[60vh] overflow-y-auto transition-transform duration-300;
-}
-
-/* Drawer filtri */
-.filter-drawer {
-  @apply fixed top-0 right-0 h-full w-80 max-w-full bg-white shadow-xl z-50 transition-transform duration-300;
-}
