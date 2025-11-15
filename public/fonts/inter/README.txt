@@ -1,0 +1,1 @@
+Per una UX coerente, scarica la famiglia Inter (https://rsms.me/inter/) e inserisci i file .woff2 qui. Oppure usa Google Fonts come da globals.css.

@@ -1,0 +1,1 @@
+Qui puoi inserire le icone SVG custom (es. pin, logo, ecc.) per mantenere coerenza visiva con il brand.

@@ -1,4 +1,137 @@
+html.dark {
+	--bg-primary: #121212;
+	--bg-secondary: #1D1D1F;
+	--text-primary: #F5F5F7;
+	--text-secondary: #A1A1A6;
+}
+
+body.dark {
+	background: var(--bg-primary);
+	color: var(--text-primary);
+}
+
+/* Migliora glassmorphism in dark mode */
+.dark .bottom-sheet-glass {
+	background: rgba(29,29,31,0.7);
+	backdrop-filter: blur(20px) saturate(180%);
+	-webkit-backdrop-filter: blur(20px) saturate(180%);
+	border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+/* Pulsanti e pin in dark mode */
+.dark .tactile-btn {
+	background: #23232b;
+	color: #F5F5F7;
+}
+.dark .pin-animate {
+	background: #23232b;
+	border-color: #7B42F6;
+}
+/* --- Animazioni Pin sulla Mappa --- */
+.pin-animate {
+	transition: transform 0.3s cubic-bezier(0.165,0.84,0.44,1), opacity 0.2s;
+}
+.pin-selected {
+	animation: pinPulse 0.4s cubic-bezier(0.4,0,0.2,1);
+	z-index: 50;
+	transform: scale(1.2);
+	opacity: 1 !important;
+}
+.pin-fade {
+	opacity: 0.2;
+	transform: scale(0.9);
+}
+@keyframes pinPulse {
+	0% { transform: scale(1); box-shadow: 0 0 0 0 #7B42F6; }
+	50% { transform: scale(1.25); box-shadow: 0 0 0 10px #7B42F633; }
+	100% { transform: scale(1.2); box-shadow: 0 0 0 0 #7B42F600; }
+}
+
+/* --- Animazione BottomSheet (slide, glass, stagger) --- */
+.bottom-sheet-animate {
+	transition: transform 0.4s cubic-bezier(0.25,0.8,0.25,1);
+	will-change: transform;
+}
+.bottom-sheet-open {
+	transform: translateY(0);
+}
+.bottom-sheet-closed {
+	transform: translateY(100%);
+}
+.bottom-sheet-glass {
+	background: rgba(255,255,255,0.7);
+	backdrop-filter: blur(20px) saturate(180%);
+	-webkit-backdrop-filter: blur(20px) saturate(180%);
+}
+.bottom-sheet-stagger > * {
+	opacity: 0;
+	transform: translateY(20px);
+	animation: staggerIn 0.4s forwards;
+}
+.bottom-sheet-stagger > *:nth-child(1) { animation-delay: 0.1s; }
+.bottom-sheet-stagger > *:nth-child(2) { animation-delay: 0.2s; }
+.bottom-sheet-stagger > *:nth-child(3) { animation-delay: 0.3s; }
+@keyframes staggerIn {
+	to { opacity: 1; transform: none; }
+}
+
+/* --- Micro-interazioni Pulsanti --- */
+.tactile-btn {
+	transition: transform 0.1s cubic-bezier(0.4,0,0.2,1), box-shadow 0.2s;
+}
+.tactile-btn:active {
+	transform: scale(0.95);
+	box-shadow: 0 2px 8px #7B42F633;
+}
+/* Fade-in animation for list view */
+.animate-fade-in {
+	animation: fadeIn 0.4s cubic-bezier(0.25,0.8,0.25,1);
+}
+@keyframes fadeIn {
+	from { opacity: 0; transform: translateX(40px); }
+	to { opacity: 1; transform: none; }
+}
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap');
+
+html {
+	font-family: 'Inter', sans-serif;
+	background: #F5F5F7;
+	color: #1D1D1F;
+	transition: background 0.3s, color 0.3s;
+}
+body {
+	min-height: 100vh;
+	min-width: 100vw;
+	overscroll-behavior: none;
+}
+
+/* Glassmorphism utility */
+.glass {
+	background: rgba(255,255,255,0.7);
+	backdrop-filter: blur(20px) saturate(180%);
+	-webkit-backdrop-filter: blur(20px) saturate(180%);
+	border-radius: 1.5rem;
+	box-shadow: 0 4px 32px rgba(123,66,246,0.08);
+}
+
+/* Shimmer loader */
+.shimmer {
+	position: relative;
+	overflow: hidden;
+	background: #e0e0e0;
+}
+.shimmer::after {
+	content: '';
+	position: absolute;
+	top: 0; left: -150px; width: 150px; height: 100%;
+	background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+	animation: shimmer 1.2s infinite;
+}
+@keyframes shimmer {
+	100% { left: 100%; }
+}
