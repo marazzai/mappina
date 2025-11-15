@@ -16,6 +16,11 @@ module.exports = {
         'text-primary': '#1D1D1F',
         'text-secondary': '#515152',
         'secondary': '#FFFFFF',
+        dark: '#4c1d95',
+        music: '#7c3aed', // viola
+        food: '#fb923c', // arancione
+        art: '#f472b6', // rosa
+        sport: '#34d399', // verde
       },
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
@@ -31,20 +36,3 @@ module.exports = {
   },
   plugins: [require('@tailwindcss/forms')],
 }
-          dark: '#4c1d95',
-        },
-        music: '#7c3aed', // viola
-        food: '#fb923c', // arancione
-        art: '#f472b6', // rosa
-        sport: '#34d399', // verde
-      },
-      fontFamily: {
-        sans: ['Inter', 'Arial', 'sans-serif'],
-      },
-      backdropBlur: {
-        xs: '2px',
-      },
-    },
-  },
-  plugins: [require('@tailwindcss/forms')],
-};

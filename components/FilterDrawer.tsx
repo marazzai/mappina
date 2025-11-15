@@ -1,22 +1,18 @@
 "use client";
+
 import React from "react";
 import clsx from "clsx";
-
-export interface FiltersState {
-  category: string;
-  date: string;
-  popular: boolean;
-}
+import type { Filters } from "@/context/FiltersContext";
 
 interface FilterDrawerProps {
   open: boolean;
   onClose?: () => void;
-  filters: FiltersState;
-  setFilters: (f: FiltersState) => void;
+  filters: Filters;
+  setFilters: (f: Filters) => void;
 }
 
-const categories = ['Tutti', 'Cibo', 'Musica', 'Arte'];
-const dates = ['Tutte', 'Oggi', 'Domani', 'Questa settimana'];
+const categories = ["tutti", "cibo", "musica", "arte"];
+const dates = ["oggi", "domani", "weekend"];
 
 export function FilterDrawer({ open, onClose, filters, setFilters }: FilterDrawerProps) {
   return (
@@ -37,11 +33,19 @@ export function FilterDrawer({ open, onClose, filters, setFilters }: FilterDrawe
             <button
               key={cat}
               className={clsx('px-3 py-1 rounded-full border',
-                filters.category === cat ? 'bg-accent text-white border-accent' : 'bg-gray-100 text-secondary border-gray-200',
+                (cat === "tutti" && filters.categories.length === 0) || (cat !== "tutti" && filters.categories.includes(cat))
+                  ? 'bg-accent text-white border-accent'
+                  : 'bg-gray-100 text-secondary border-gray-200',
                 'transition-colors')}
-              onClick={() => setFilters({ ...filters, category: cat })}
+              onClick={() => {
+                if (cat === "tutti") {
+                  setFilters({ ...filters, categories: [] });
+                } else {
+                  setFilters({ ...filters, categories: [cat] });
+                }
+              }}
             >
-              {cat}
+              {cat.charAt(0).toUpperCase() + cat.slice(1)}
             </button>
           ))}
         </div>
@@ -55,9 +59,9 @@ export function FilterDrawer({ open, onClose, filters, setFilters }: FilterDrawe
               className={clsx('px-3 py-1 rounded-full border',
                 filters.date === date ? 'bg-accent text-white border-accent' : 'bg-gray-100 text-secondary border-gray-200',
                 'transition-colors')}
-              onClick={() => setFilters({ ...filters, date })}
+              onClick={() => setFilters({ ...filters, date: date as Filters["date"] })}
             >
-              {date}
+              {date.charAt(0).toUpperCase() + date.slice(1)}
             </button>
           ))}
         </div>
@@ -66,11 +70,11 @@ export function FilterDrawer({ open, onClose, filters, setFilters }: FilterDrawe
         <label className="flex items-center gap-2 cursor-pointer">
           <input
             type="checkbox"
-            checked={filters.popular}
-            onChange={e => setFilters({ ...filters, popular: e.target.checked })}
+            checked={filters.freeOnly}
+            onChange={e => setFilters({ ...filters, freeOnly: e.target.checked })}
             className="form-checkbox accent-accent"
           />
-          <span className="font-semibold">Solo eventi popolari</span>
+          <span className="font-semibold">Solo eventi gratuiti</span>
         </label>
       </div>
       <button

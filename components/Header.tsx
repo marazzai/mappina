@@ -8,23 +8,9 @@ import { ThemeToggle } from "./ThemeToggle";
 
 const FilterDrawer = dynamic(() => import("./FilterDrawer"), { ssr: false });
 
-export type FilterState = {
-  date: "oggi" | "domani" | "weekend" | null;
-  categories: string[];
-  freeOnly: boolean;
-};
+import type { Filters } from "@/context/FiltersContext";
 
-const defaultFilters: FilterState = {
-  date: null,
-  categories: [],
-  freeOnly: false,
-};
-
-export default function Header({
-  onFiltersChange,
-}: {
-  onFiltersChange?: (filters: FilterState) => void;
-}) {
+export default function Header() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const { filters, setFilters } = useFilters();
   const [user, setUser] = useState<any>(null);
@@ -83,7 +69,6 @@ export default function Header({
         onClose={() => setDrawerOpen(false)}
         filters={filters}
         setFilters={setFilters}
-        onApply={handleApply}
       />
     </>
   );

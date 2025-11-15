@@ -4,7 +4,8 @@ import { createClient } from '@supabase/supabase-js';
 import { Layout } from '../components/Layout';
 import { MapPin } from '../components/MapPin';
 import { BottomSheet } from '../components/BottomSheet';
-import { FilterDrawer, FiltersState } from '../components/FilterDrawer';
+import { FilterDrawer } from '../components/FilterDrawer';
+import type { Filters } from '../context/FiltersContext';
 import { TactileButton } from '../components/TactileButton';
 import { ShimmerLoader } from '../components/ShimmerLoader';
 import { Overlay } from '../components/Overlay';
@@ -16,17 +17,17 @@ const supabase = createClient(
 );
 
 // Stato filtri di default
-const defaultFilters: FiltersState = {
-  category: 'Tutti',
-  date: 'Tutte',
-  popular: false,
+const defaultFilters: Filters = {
+  date: null,
+  categories: [],
+  freeOnly: false,
 };
 
 export default function HomePage() {
   // Stato UI
   const [selected, setSelected] = useState<number | null>(null);
   const [filterOpen, setFilterOpen] = useState(false);
-  const [filters, setFilters] = useState<FiltersState>(defaultFilters);
+  const [filters, setFilters] = useState<Filters>(defaultFilters);
   const [events, setEvents] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -36,11 +37,11 @@ export default function HomePage() {
     setLoading(true);
     setError(null);
     let query = supabase.from('events').select('*');
-    if (filters.category !== 'Tutti') {
-      query = query.eq('category', filters.category);
+    if (filters.categories.length > 0) {
+      query = query.in('category', filters.categories);
     }
-    if (filters.popular) {
-      query = query.gte('popularity', 10);
+    if (filters.freeOnly) {
+      query = query.eq('free', true);
     }
     query
       .then(({ data, error }) => {
